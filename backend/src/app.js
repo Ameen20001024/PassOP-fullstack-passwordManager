@@ -16,8 +16,8 @@ import userRouter from "./routes/user.routes.js"
 import credentialsRouter from "./routes/credentials.routes.js"
 
 
-app.use("/api/v1/users", userRouter)
-app.use("/api/v1/credentials", credentialsRouter)
+app.use("/api/v1/user", userRouter)
+app.use("/api/v1/user/manager", credentialsRouter)
 
 
 

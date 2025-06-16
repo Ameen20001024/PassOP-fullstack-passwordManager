@@ -3,71 +3,89 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState, useRef } from 'react';
 import {v4 as uuid} from 'uuid'
+import axios from 'axios';
 
 
 const Manager = () => {
 
-  const [form, setForm] = useState({site: "", username: "", password: "" })
-  const [passwordArray, setPasswordArray] = useState([])
-  const ref = useRef()
-  const passwordRef = useRef()
+    const [form, setForm] = useState({site: "", username: "", password: "" })
+    const [credential, setCredential] = useState({site_url: "", username: "", password: "", owner: ""})
+    const [passwordArray, setPasswordArray] = useState([])
+    const ref = useRef()
+    const passwordRef = useRef()
 
-  const handleChange = (e)=>{
-    setForm({...form,[e.target.name]:e.target.value})
-  }
-
-  const savepassword = ()=>{
-    if(form.site.length>3 && form.username.length>3 && form.password.length> 7){setPasswordArray([...passwordArray, {...form, id: uuid()}])
-    setForm({site: "", username: "", password: "" })
-    toast('Password saved!', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark"
-    })}
-    else{
-        toast('Error: Password not saved!');
+    const handleChange = (e)=>{
+        setForm({...form,[e.target.name]:e.target.value})
     }
-  }
 
-  const handleDelete = (id)=> {
-    let c = confirm("Are you sure you want to delete this password?")
-    if (c){
-      setPasswordArray(passwordArray.filter(item=> id !== item.id ))
-      toast('Password deleted!', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark"
-    })
-    }
-  }
+    useEffect( ()=>{
+        const fetchdata = async () => {
+            let credentialsarray = await axios.get("http://localhost:8000/api/v1/user/manager")
+            setPasswordArray(credentialsarray.data)
+        }
 
-  const handleEdit = (id) => {
-    setForm(passwordArray.filter(item => id === item.id)[0])
-    setPasswordArray(passwordArray.filter(item=> id !== item.id))
-  }
+        fetchdata()
 
-  const showpassword = () => {
-    // passwordRef.current.type = "text"
-     console.log(ref.current.src)
-    if (ref.current.src.includes("icons/eyecross.png")){
-      ref.current.src = "icons/eye.png"
-      passwordRef.current.type = "password"
+    },[credential])
+
+    const savepassword = async ()=>{
+
+        if(form.site.length>3 && form.username.length>3 && form.password.length> 7){
+
+            let newcredential = await axios.post("http://localhost:8000/api/v1/user/manager")
+            setCredential(newcredential)
+
+            setPasswordArray([...passwordArray, {...form, id: uuid()}])
+            setForm({site: "", username: "", password: "" })
+            toast('Password saved!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark"
+            })}
+        else{
+            toast('Error: Password not saved!');
+        }
     }
-    else{
-      passwordRef.current.type = "text"
-      ref.current.src = "icons/eyecross.png"
+
+    const handleDelete = (id)=> {
+        let c = confirm("Are you sure you want to delete this password?")
+        if (c){
+            setPasswordArray(passwordArray.filter(item=> id !== item.id ))
+            toast('Password deleted!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark"
+            })
+        }
     }
-  }
+
+    const handleEdit = (id) => {
+        setForm(passwordArray.filter(item => id === item.id)[0])
+        setPasswordArray(passwordArray.filter(item=> id !== item.id))
+    }
+
+    const showpassword = () => {
+        // passwordRef.current.type = "text"
+        console.log(ref.current.src)
+        if (ref.current.src.includes("icons/eyecross.png")){
+            ref.current.src = "icons/eye.png"
+            passwordRef.current.type = "password"
+        }
+        else{
+            passwordRef.current.type = "text"
+            ref.current.src = "icons/eyecross.png"
+        }
+    }
   
 
 
@@ -79,7 +97,7 @@ const Manager = () => {
 
       <div className='p-3 md:mycontainer min-h-[83.373vh]'>
 
-        <h1 className='text-4xl text-center text font-bold'>
+        <h1 className='text-4xl  text-center text font-bold'>
           <span className='text-green-500'> &lt;</span>
           <span>Pass</span><span className='text-green-500'>OP/&gt;</span>
         </h1>

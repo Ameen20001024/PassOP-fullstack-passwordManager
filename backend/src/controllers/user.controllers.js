@@ -68,11 +68,6 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Something went worng; user not regiestered")
     }
 
-    const options = {
-            httpOnly: true,
-            secure: true
-        }
-
     return res
     .status(200)
     .json(
@@ -89,19 +84,17 @@ const loginUser = asyncHandler(async (req, res) => {
     // access and refresh token
     // send cookie
 
-    const { username , email, password } = req.body
+    const { username, password } = req.body
 
-    if (!username && !email) {
-        throw new ApiError(400, "Username or email required for sign in")
+    if (!username) {
+        throw new ApiError(400, "Username required for sign in")
     }
 
     if (!password) {
         throw new ApiError(400, "password required")
     }
 
-    const user = await User.findOne({
-        $or: [{email}, {username}]
-    })
+    const user = await User.findOne({username: username})
 
     if (!user) {
         throw new ApiError(401, "user not found")
