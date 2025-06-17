@@ -51,13 +51,13 @@ const EditManager = () => {
     const showpassword = () => {
         // passwordRef.current.type = "text"
         console.log(ref.current.src)
-        if (ref.current.src.includes("icons/eyecross.png")){
-            ref.current.src = "icons/eye.png"
+        if (ref.current.src.includes("/icons/eyecross.png")){
+            ref.current.src = "/icons/eye.png"
             passwordRef.current.type = "password"
         }
         else{
             passwordRef.current.type = "text"
-            ref.current.src = "icons/eyecross.png"
+            ref.current.src = "/icons/eyecross.png"
         }
     }
 
@@ -70,7 +70,8 @@ const EditManager = () => {
                 {
                     headers: {
                       "Content-Type": "application/json"
-                    }
+                    },
+                    withCredentials: true
                 })
             
             toast('Password Edit saved!', {
@@ -126,7 +127,7 @@ const EditManager = () => {
               
               <span className='absolute right-[3px] top-[4px] cursor-pointer' onClick={showpassword}>
 
-                <img ref={ref} className='p-1' width={26} src="./icons/eye.png" alt="eye" />
+                <img ref={ref} className='p-1' width={26} src="/icons/eye.png" alt="eye" />
 
               </span>
 

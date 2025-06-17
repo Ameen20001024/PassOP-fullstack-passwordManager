@@ -106,7 +106,7 @@ const Manager = () => {
 
     const handleEdit = (id) => {
 
-        setForm(passwordArray.filter(i=>i.id===id)[0])
+        // setForm(passwordArray.filter(i=>i.id===id)[0])
 
         navigate(`/manager/edit/${id}`)
         // setForm(passwordArray.filter(item => id === item.id)[0])
@@ -116,13 +116,13 @@ const Manager = () => {
     const showpassword = () => {
         // passwordRef.current.type = "text"
         console.log(ref.current.src)
-        if (ref.current.src.includes("icons/eyecross.png")){
-            ref.current.src = "icons/eye.png"
+        if (ref.current.src.includes("/icons/eyecross.png")){
+            ref.current.src = "/icons/eye.png"
             passwordRef.current.type = "password"
         }
         else{
             passwordRef.current.type = "text"
-            ref.current.src = "icons/eyecross.png"
+            ref.current.src = "/icons/eyecross.png"
         }
     }
   
@@ -159,7 +159,7 @@ const Manager = () => {
               
               <span className='absolute right-[3px] top-[4px] cursor-pointer' onClick={showpassword}>
 
-                <img ref={ref} className='p-1' width={26} src="./icons/eye.png" alt="eye" />
+                <img ref={ref} className='p-1' width={26} src="/icons/eye.png" alt="eye" />
 
               </span>
 

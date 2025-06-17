@@ -89,6 +89,8 @@ const updatecredentialbyId = asyncHandler(async (req, res) => {
         new: true
     })
 
+    console.log(updatedCredential)
+
     return res
     .status(200)
     .json(
