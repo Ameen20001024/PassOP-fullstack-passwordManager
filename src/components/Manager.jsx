@@ -18,8 +18,13 @@ const Manager = () => {
     }
 
     const fetchdata = async () => {
-        let credentialsarray = await axios.get("http://localhost:8000/api/v1/user/manager")
-        setPasswordArray(credentialsarray.data)
+       try {
+          const credentialsarray = await axios.get("http://localhost:8000/api/v1/user/manager", {withCredentials: true})
+          console.log("API response:", credentialsarray.data.data)
+          setPasswordArray(credentialsarray.data.data)
+       } catch (error) {
+          console.error("Error fetching credentials:", error)
+       }
     }
 
     useEffect( ()=>{
@@ -37,7 +42,8 @@ const Manager = () => {
             {
                 headers: {
                   "Content-Type": "application/json"
-                }
+                },
+                withCredentials: true
             })
             
             .then((response)=>{
@@ -53,11 +59,11 @@ const Manager = () => {
                     progress: undefined,
                     theme: "dark"
                 })
+            })
+
             .catch((error)=>{
               console.log(error)
               console.log("error occured")
-            })
-
             })
           
           fetchdata()
@@ -73,24 +79,34 @@ const Manager = () => {
         let c = confirm("Are you sure you want to delete this password?")
         if (c){
             
-            let newcredential = await axios.delete(`http://localhost:8000/api/v1/user/manager/delete/${id}`)
-            
-            toast('Password deleted!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark"
-            })
-
-            fetchdata()
+            try {
+              let newcredential = await axios.delete(`http://localhost:8000/api/v1/user/manager/delete/${id}`,
+                {
+                  withCredentials: true
+                }
+              )
+              
+              toast('Password deleted!', {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "dark"
+              })
+  
+              fetchdata()
+            } catch (error) {
+                toast.error("failed to delete")
+            }
         }
     }
 
     const handleEdit = (id) => {
+
+        setForm(passwordArray.filter(i=>i.id===id)[0])
 
         navigate(`/manager/edit/${id}`)
         // setForm(passwordArray.filter(item => id === item.id)[0])
@@ -193,8 +209,8 @@ const Manager = () => {
 
                   <td className='py-2 border border-white text-center'>
                     <div className='items-center justify-center flex gap-5'>
-                      <button onClick={()=>{handleEdit(item.id)}}><img width={18} height={18} src="icons/edit.png" alt="k" /></button>
-                      <button onClick={()=>{handleDelete(item.id)}}><img width={18} height={18} src="icons/delete.png" alt="l" /></button>
+                      <button onClick={()=>{handleEdit(item._id)}}><img width={18} height={18} src="icons/edit.png" alt="k" /></button>
+                      <button onClick={()=>{handleDelete(item._id)}}><img width={18} height={18} src="icons/delete.png" alt="l" /></button>
                     </div>
                   </td>
                 </tr>

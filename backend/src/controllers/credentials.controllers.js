@@ -58,7 +58,7 @@ const getAllpasswords = asyncHandler(async (req, res) => {
 
 const deletecredentialbyId = asyncHandler(async (req, res) => {
     
-    const {password_id} = req. params
+    const {password_id} = req.params
 
     try {
         await Credential.findByIdAndDelete(password_id)

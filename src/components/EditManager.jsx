@@ -7,37 +7,43 @@ import axios from 'axios';
 
 const EditManager = () => {
 
-    const [formEdit, formsetEdit] = useState({site: "", username: "", password: "" })
+    const [formEdit, setFormEdit] = useState({})
     const [editpasswordArray, setEditPasswordArray] = useState([])
     const ref = useRef()
     const passwordRef = useRef()
     const password_id = useParams().id
     const navigate = useNavigate()
+  
 
     const handleChange = (e)=>{
-        formsetEdit({...formEdit,[e.target.name]:e.target.value})
+        setFormEdit({...formEdit,[e.target.name]:e.target.value})
     }
 
     const fetchdata = async () => {
         try {
-            let res = await axios.get("http://localhost:8000/api/v1/user/manager");
-            const allPasswords = res.data;
+              let res = await axios.get("http://localhost:8000/api/v1/user/manager", {withCredentials: true});
+              const allPasswords = res.data.data;
 
-            const selectedPassword = allPasswords.find(item => item.id === password_id);
-            const otherPasswords = allPasswords.filter(item => item.id !== password_id);
+              const selectedPassword = allPasswords.find(item => item._id === password_id);
+              const otherPasswords = allPasswords.filter(item => item._id !== password_id);
 
-            formsetEdit(selectedPassword || { site: "", username: "", password: "" });
-            setEditPasswordArray(otherPasswords);
+              if (!selectedPassword) {
+                  toast.error("couldn't store data to update in selectedPassword")
+              }
+              
+              setFormEdit({site_url: selectedPassword.site_url, username: selectedPassword.username, password: selectedPassword.password})
+
+              setEditPasswordArray(otherPasswords);
         } catch (err) {
-            console.error("Failed to fetch password data", err);
-            toast("Error fetching data");
+              console.error("Failed to fetch password data", err);
+              toast("Error fetching data");
         }
       };
 
     useEffect( ()=>{
         
         fetchdata()
-        // formsetEdit(editpasswordArray.filter(item => password_id === item.id)[0])
+        // setFormEdit(editpasswordArray.filter(item => password_id === item.id)[0])
         // setEditPasswordArray(editpasswordArray.filter(item=> password_id !== item.id))
 
     },[password_id])
@@ -57,7 +63,7 @@ const EditManager = () => {
 
     const updatepassword = async (password_id) => {
 
-        if(formEdit.site.length>3 && formEdit.username.length>3 && formEdit.password.length> 7){
+        if(formEdit.site_url.length>3 && formEdit.username.length>3 && formEdit.password.length> 7){
 
             await axios.patch(`http://localhost:8000/api/v1/user/manager/edit/${password_id}`,
                 formEdit,
@@ -108,7 +114,7 @@ const EditManager = () => {
 
         <div className='flex flex-col items-center text-black p-4 gap-8'>
 
-          <input type="text" name="site" id="site" value={formEdit.site} onChange={handleChange} placeholder='Enter your website URL' className='rounded-full border border-green-500 w-full py-1 p-4'/>
+          <input type="text" name="site_url" id="site_url" value={formEdit.site_url} onChange={handleChange} placeholder='Enter your website_url URL' className='rounded-full border border-green-500 w-full py-1 p-4'/>
 
           <div className='flex w-full gap-8 justify-between flex-col md:flex-row'>
 
@@ -140,7 +146,7 @@ const EditManager = () => {
           {editpasswordArray.length !==0 &&<table className="table-auto w-full rounded-md overflow-hidden mb-10">
             <thead className='bg-green-800 text-white'>
               <tr>
-                <th className='py-2'>Site</th>
+                <th className='py-2'>site_url</th>
                 <th className='py-2'>Username</th>
                 <th className='py-2'>Password</th>
               </tr>
@@ -152,7 +158,7 @@ const EditManager = () => {
 
                   <td className='py-2 border border-white text-center'>
                     <div className='items-center justify-center '>
-                      <a href={item.site}>{item.site}</a>
+                      <a href={item.site_url}>{item.site_url}</a>
                     </div>
                   </td>
 
