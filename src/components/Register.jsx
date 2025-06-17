@@ -1,6 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const Register = () => {
 
@@ -23,9 +24,9 @@ const Register = () => {
 
     const onSubmit = async (data)=> {
         await delay(1);
-        let r = await axios.post("http://localhost:8000/api/v1/user/register")
+        let r = await axios.post("http://localhost:8000/api/v1/user/register", data)
         console.log(data)
-        console.log(r.text())
+        console.log(r.data)
         navigate("/")
     }
 
@@ -38,7 +39,7 @@ const Register = () => {
 
                     {errors.fullname && <div>{errors.fullname.message}</div> }
 
-                    <input type="email" placeholder='Enter your Email address' {...register("email", {required: {value:true, message: "This field is required"}, minLength: {value:3, message: "minimum 14 charecters required"}})} />
+                    <input type="email" placeholder='Enter your Email address' {...register("email", {required: {value:true, message: "This field is required"}, minLength: {value:14, message: "minimum 14 charecters required"}})} />
 
                     {errors.email && <div>{errors.email
                     .message}</div> }

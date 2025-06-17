@@ -5,9 +5,10 @@ import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Register from './components/Register.jsx'
 import EditManager from './components/EditManager'
-import Login from 'src\components\Login.jsx'
 import RegisterNavbar from './components/RegisterNavbar.jsx'
 import LoginNavbar from './components/LoginNavbar.jsx'
+import Login from './components/login.jsx'
+
 
 
 function App() {
@@ -56,7 +57,7 @@ function App() {
         },
 
         {
-            path: "/manager/edit",
+            path: "/manager/edit/:id",
             element: <>
                           <Navbar />
 

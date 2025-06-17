@@ -4,7 +4,7 @@ const credentialsSchema = new Schema(
     {
 
         site_url:{
-            type: string,
+            type: String,
             required: true,
             unique: true,
             trim: true,
@@ -13,7 +13,7 @@ const credentialsSchema = new Schema(
         },
 
         username:{
-            type: string,
+            type: String,
             required: true,
             lowercase: true,
             trim: true,
@@ -22,7 +22,7 @@ const credentialsSchema = new Schema(
 
         password:{
             required: [true, "Password is required"],
-            type: string
+            type: String
         },
 
         owner:{
@@ -36,4 +36,4 @@ const credentialsSchema = new Schema(
         timestamps: true
     })
 
-export const Credentials = mongoose.model("Playlist", credentialsSchema)
+export const Credential = mongoose.model("Playlist", credentialsSchema)

@@ -1,15 +1,19 @@
-import { User } from "../models/user.models";
-import { ApiError } from "../utils/apierror";
-import { ApiResponse } from "../utils/apiResponse";
+import { User } from "../models/user.models.js";
+import { ApiError } from "../utils/apierror.js";
+import { ApiResponse } from "../utils/apiResponse.js";
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
-import { asyncHandler } from "../utils/asyncHandler";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 
 const generateaccessandrefreshtokens = async (userId) => {
     try {
         
         const user = await User.findById(userId)
+
+        if (!user) {
+            throw new ApiError(400, "User not found")
+        }
+
         const accesstoken = user.generateaccesstoken()
         const refreshtoken = user.generaterefreshtoken()
 
@@ -148,8 +152,8 @@ const logoutuser = asyncHandler(async (req, res) => {
 
     return res
     .status(200)
-    .clearcookie("refreshtoken", options)
-    .clearcookie("accesstoken", options)
+    .clearCookie("refreshtoken", options)
+    .clearCookie("accesstoken", options)
     .json(
         new ApiResponse(200, {}, "Logged out successfully")
     )
@@ -163,12 +167,13 @@ const RefreshAccessToken = asyncHandler(async (req, res) => {
         throw new ApiError(400, "unautherised request")
     }
 
-    const decodedToken = jwt.verify(
-        incomingrefreshtoken,
-        process.env.REFRESHTOKENSECRET
-    )
-
     try {
+
+        const decodedToken = jwt.verify(
+            incomingrefreshtoken,
+            process.env.REFRESHTOKENSECRET
+        )
+
         const user = await User.findById(decodedToken._id)
     
         if (!user) {

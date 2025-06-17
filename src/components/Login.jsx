@@ -1,8 +1,13 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import axios from 'axios'
 
 const Login = () => {
 
     const {register, setError, handleSubmit, formState: {errors, isSubmitting}} = useForm()
+
+    const navigate = useNavigate()
     
     const delay = (d) => {
         return new Promise((res, rej) => {
@@ -14,9 +19,9 @@ const Login = () => {
     
     const onSubmit = async (data)=> {
         await delay(1);
-        let k = await axios.post("http://localhost:8000/api/v1/user/login")
+        let k = await axios.post("http://localhost:8000/api/v1/user/login", data)
         console.log(data)
-        console.log(k.text())
+        console.log(k.data)
         navigate("/manager")
     }
 

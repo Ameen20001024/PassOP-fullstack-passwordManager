@@ -1,9 +1,8 @@
-import React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState, useRef } from 'react';
-import {v4 as uuid} from 'uuid'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 const Manager = () => {
@@ -13,29 +12,28 @@ const Manager = () => {
     const [passwordArray, setPasswordArray] = useState([])
     const ref = useRef()
     const passwordRef = useRef()
+    const navigate = useNavigate()
 
     const handleChange = (e)=>{
         setForm({...form,[e.target.name]:e.target.value})
     }
 
+    const fetchdata = async () => {
+        let credentialsarray = await axios.get("http://localhost:8000/api/v1/user/manager")
+        setPasswordArray(credentialsarray.data)
+    }
+
     useEffect( ()=>{
-        const fetchdata = async () => {
-            let credentialsarray = await axios.get("http://localhost:8000/api/v1/user/manager")
-            setPasswordArray(credentialsarray.data)
-        }
 
         fetchdata()
 
-    },[credential])
+    },[])
 
     const savepassword = async ()=>{
 
         if(form.site.length>3 && form.username.length>3 && form.password.length> 7){
 
-            let newcredential = await axios.post("http://localhost:8000/api/v1/user/manager")
-            setCredential(newcredential)
-
-            setPasswordArray([...passwordArray, {...form, id: uuid()}])
+            await axios.post("http://localhost:8000/api/v1/user/manager", form)
             setForm({site: "", username: "", password: "" })
             toast('Password saved!', {
                 position: "top-right",
@@ -46,16 +44,23 @@ const Manager = () => {
                 draggable: true,
                 progress: undefined,
                 theme: "dark"
-            })}
+            })
+          
+          fetchdata()
+        
+        }
+
         else{
             toast('Error: Password not saved!');
         }
     }
 
-    const handleDelete = (id)=> {
+    const handleDelete = async (id)=> {
         let c = confirm("Are you sure you want to delete this password?")
         if (c){
-            setPasswordArray(passwordArray.filter(item=> id !== item.id ))
+            
+            let newcredential = await axios.delete(`http://localhost:8000/api/v1/user/manager/delete/${id}`)
+            
             toast('Password deleted!', {
                 position: "top-right",
                 autoClose: 5000,
@@ -66,12 +71,16 @@ const Manager = () => {
                 progress: undefined,
                 theme: "dark"
             })
+
+            fetchdata()
         }
     }
 
     const handleEdit = (id) => {
-        setForm(passwordArray.filter(item => id === item.id)[0])
-        setPasswordArray(passwordArray.filter(item=> id !== item.id))
+
+        navigate(`/manager/edit/${id}`)
+        // setForm(passwordArray.filter(item => id === item.id)[0])
+        // setPasswordArray(passwordArray.filter(item=> id !== item.id))
     }
 
     const showpassword = () => {
@@ -152,7 +161,7 @@ const Manager = () => {
                 return <tr key={index}>
                   <td className='py-2 border border-white text-center'>
                     <div className='items-center justify-center '>
-                      <a href="{item.site}">{item.site}</a>
+                      <a href={item.site}>{item.site}</a>
                     </div>
                   </td>
 

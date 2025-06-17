@@ -1,9 +1,7 @@
-import { User } from "../models/user.models";
-import { ApiError } from "../utils/apierror";
-import { ApiResponse } from "../utils/apiResponse";
-import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
-import { asyncHandler } from "../utils/asyncHandler";
+import { ApiError } from "../utils/apierror.js";
+import { ApiResponse } from "../utils/apiResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { Credential } from "../models/credentials.models.js";
 
 
 
@@ -17,7 +15,7 @@ const saveAPassword = asyncHandler(async (req, res) => {
 
     const existinguserpassword = await Credential.findOne({site_url: site_url, owner: req.user?._id})
 
-    if (!existinguserpassword) {
+    if (existinguserpassword) {
         throw new ApiError(400, "Credentials already exist for the user")
     }
 
@@ -71,7 +69,30 @@ const deletecredentialbyId = asyncHandler(async (req, res) => {
     return res
     .status(200)
     .json(
-        new ApiResponse(200,{}, "Credential deleted successfully")
+        new ApiResponse(200, {}, "Credential deleted successfully")
+    )
+
+})
+
+const updatecredentialbyId = asyncHandler(async (req, res) => {
+    
+    const {password_id} = req.params
+    const {site_url, username, password} = req.body
+
+    const updatedCredential = await Credential.findByIdAndUpdate(password_id, {
+        site_url: site_url,
+        username: username,
+        password: password
+    },
+    
+    {
+        new: true
+    })
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, updatedCredential, "Updated successfully")
     )
 
 })
@@ -81,5 +102,6 @@ const deletecredentialbyId = asyncHandler(async (req, res) => {
 export {
     saveAPassword,
     deletecredentialbyId,
-    getAllpasswords
+    getAllpasswords,
+    updatecredentialbyId
 }
