@@ -36,4 +36,4 @@ const credentialsSchema = new Schema(
         timestamps: true
     })
 
-export const Credential = mongoose.model("Playlist", credentialsSchema)
+export const Credential = mongoose.model("Credential", credentialsSchema)

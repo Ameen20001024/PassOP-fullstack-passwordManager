@@ -59,7 +59,13 @@ const EditManager = () => {
 
         if(formEdit.site.length>3 && formEdit.username.length>3 && formEdit.password.length> 7){
 
-            await axios.patch(`http://localhost:8000/api/v1/user/manager/edit/${password_id}`, formEdit)
+            await axios.patch(`http://localhost:8000/api/v1/user/manager/edit/${password_id}`,
+                formEdit,
+                {
+                    headers: {
+                      "Content-Type": "application/json"
+                    }
+                })
             
             toast('Password Edit saved!', {
                 position: "top-right",

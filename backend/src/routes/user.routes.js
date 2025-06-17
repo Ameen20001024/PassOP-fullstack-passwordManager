@@ -15,6 +15,6 @@ router.route("/register").post(registerUser)
 router.route("/login").post(loginUser)
 router.route("/user-account").get(verifyJWT, getCurrentUser)
 router.route("/refresh-token").post(RefreshAccessToken)
-router.route("/logout").post(logoutuser)
+router.route("/logout").post(verifyJWT, logoutuser)
 
 export default router

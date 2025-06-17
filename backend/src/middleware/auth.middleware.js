@@ -6,7 +6,7 @@ import { ApiError } from "../utils/apierror.js";
 
 export const verifyJWT = asyncHandler(async (req, __dirname, next) => {
     try {
-        const token = req.cookie?.accesstoken
+        const token = req.cookies?.accesstoken
         if (!token) {
             throw new ApiError(401, "unautherised request")
         }

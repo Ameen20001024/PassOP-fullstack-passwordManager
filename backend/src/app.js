@@ -4,7 +4,10 @@ import cors from 'cors'
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  origin: "http://localhost:5173", // Vite default port
+  credentials: true                // ⬅️ allows cookies to pass
+}));
 app.use(cookieParser())
 
 app.use(express.json({limit: '16kb'}))

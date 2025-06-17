@@ -19,11 +19,21 @@ const Login = () => {
     
     const onSubmit = async (data)=> {
         await delay(1);
-        let k = await axios.post("http://localhost:8000/api/v1/user/login", data)
+        let k = await axios.post("http://localhost:8000/api/v1/user/login",
+            data,
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                withCredentials: true
+                
+            }
+        )
         console.log(data)
         console.log(k.data)
         navigate("/manager")
-    }
+    } 
 
 
 

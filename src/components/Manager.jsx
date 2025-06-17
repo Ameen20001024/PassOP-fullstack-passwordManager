@@ -7,8 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Manager = () => {
 
-    const [form, setForm] = useState({site: "", username: "", password: "" })
-    const [credential, setCredential] = useState({site_url: "", username: "", password: "", owner: ""})
+    const [form, setForm] = useState({site_url: "", username: "", password: "" })
     const [passwordArray, setPasswordArray] = useState([])
     const ref = useRef()
     const passwordRef = useRef()
@@ -31,19 +30,34 @@ const Manager = () => {
 
     const savepassword = async ()=>{
 
-        if(form.site.length>3 && form.username.length>3 && form.password.length> 7){
+        if(form.site_url.length>3 && form.username.length>3 && form.password.length> 7){
 
-            await axios.post("http://localhost:8000/api/v1/user/manager", form)
-            setForm({site: "", username: "", password: "" })
-            toast('Password saved!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark"
+            await axios.post("http://localhost:8000/api/v1/user/manager",
+              form,
+            {
+                headers: {
+                  "Content-Type": "application/json"
+                }
+            })
+            
+            .then((response)=>{
+                console.log(response)
+                setForm({site_url: "", username: "", password: "" })
+                toast('Password saved!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark"
+                })
+            .catch((error)=>{
+              console.log(error)
+              console.log("error occured")
+            })
+
             })
           
           fetchdata()
@@ -117,7 +131,7 @@ const Manager = () => {
 
         <div className='flex flex-col items-center text-black p-4 gap-8'>
 
-          <input type="text" name="site" id="site" value={form.site} onChange={handleChange} placeholder='Enter your website URL' className='rounded-full border border-green-500 w-full py-1 p-4'/>
+          <input type="text" name="site_url" id="site_url" value={form.site_url} onChange={handleChange} placeholder='Enter your website_url URL' className='rounded-full border border-green-500 w-full py-1 p-4'/>
 
           <div className='flex w-full gap-8 justify-between flex-col md:flex-row'>
 
@@ -149,7 +163,7 @@ const Manager = () => {
           {passwordArray.length !==0 &&<table className="table-auto w-full rounded-md overflow-hidden mb-10">
             <thead className='bg-green-800 text-white'>
               <tr>
-                <th className='py-2'>Site</th>
+                <th className='py-2'>site_url</th>
                 <th className='py-2'>Username</th>
                 <th className='py-2'>Password</th>
                 <th className='py-2'>Action</th>
@@ -161,7 +175,7 @@ const Manager = () => {
                 return <tr key={index}>
                   <td className='py-2 border border-white text-center'>
                     <div className='items-center justify-center '>
-                      <a href={item.site}>{item.site}</a>
+                      <a href={item.site_url}>{item.site_url}</a>
                     </div>
                   </td>
 

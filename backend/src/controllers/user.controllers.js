@@ -15,7 +15,16 @@ const generateaccessandrefreshtokens = async (userId) => {
         }
 
         const accesstoken = user.generateaccesstoken()
+
+        if (!accesstoken) {
+            throw new ApiError(400, "accesstoken not generated")
+        }
+
         const refreshtoken = user.generaterefreshtoken()
+
+        if (!refreshtoken) {
+            throw new ApiError(400, "refreshtoken not generated")
+        }
 
         user.refreshtoken = refreshtoken
 
@@ -122,7 +131,8 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: true
+        secure: false,
+        sameSite: "lax"
     }
 
     return res

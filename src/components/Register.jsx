@@ -12,22 +12,34 @@ const Register = () => {
     formState: {errors, isSubmitting}
     } = useForm()
 
-    const delay = (d) => {
-        return new Promise((res, rej) => {
-            setTimeout(() => {
-                res()
-            }, d*1000);
-        })
-    }
+    // const delay = (d) => {
+    //     return new Promise((res, rej) => {
+    //         setTimeout(() => {
+    //             res()
+    //         }, d*1000);
+    //     })
+    // }
 
     const navigate = useNavigate()
 
     const onSubmit = async (data)=> {
-        await delay(1);
-        let r = await axios.post("http://localhost:8000/api/v1/user/register", data)
-        console.log(data)
-        console.log(r.data)
-        navigate("/")
+        // await delay(1);
+        await axios.post("http://localhost:8000/api/v1/user/register",
+            data,
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+        .then((response)=>{
+            console.log(response.data)
+            navigate("/")
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+        // console.log(data)
+        // console.log(r.data)
     }
 
     return (
