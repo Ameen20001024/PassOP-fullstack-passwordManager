@@ -58,21 +58,21 @@ const Register = () => {
 
                         {/* <label htmlFor="fullname">Full Name :</label> */}
                         <input  type="text" id='fullname' placeholder='Enter Full Name' className='rounded-full border-2 border-green-500 w-full py-1.5 px-13 justify-center text-center' {...register("fullname", {required: {value:true, message: "This field is required"}, minLength: {value:3, message: "minimum 3 charecters required"}})} />
-                        {errors.fullname && <div>{errors.fullname.message}</div> }
+                        {errors.fullname && <div className='text-red-500'>{errors.fullname.message}</div> }
 
                     </div>
 
                     <div className='flex gap-10 pb-2 text-lg justify-center items-center'>
                         {/* <label htmlFor="email"> Email :</label> */}
                         <input  type="email" id='email' placeholder='Enter your Email address' className='rounded-full border-2 border-green-500 w-full py-1.5 px-13 justify-center text-center' {...register("email", {required: {value:true, message: "This field is required"}, minLength: {value:14, message: "minimum 14 charecters required"}})} />
-                        {errors.email && <div>{errors.email.message}</div> }
+                        {errors.email && <div className='text-red-500'>{errors.email.message}</div> }
                     </div>
 
                     <div className="flex gap-10 pb-2 text-lg justify-center items-center b-2">
                     
                         {/* <label htmlFor="username">Username : </label> */}
                         <input  placeholder='Enter Username' id='username' type="text" className='rounded-full border-2 border-green-500 w-full py-1.5 px-13 justify-center text-center' {...register("username", {required: {value:true, message: "This field is required"}, minLength: {value:3, message: "minimum 3 charecters required"}, maxLength:{value:10, message:"maximum number of charecters is 10"}})} />
-                        {errors.username && <div> {errors.username.message} </div>}
+                        {errors.username && <div className=' text-red-500'> {errors.username.message} </div>}
                     </div>
 
 
@@ -80,7 +80,7 @@ const Register = () => {
 
                         {/* <label htmlFor="password"> Password : </label> */}
                         <input  placeholder='Enter Password' id='password' type="password" className='rounded-full border-2 border-green-500 w-full py-1.5 px-13 justify-center text-center' {...register("password", {required: {value:true, message: "This field is required"}, minLength: {value:7, message: "minimum 7 charecters required"}, maxLength:{value:12, message:"maximum number of charecters is 12"}})} />
-                        {errors.password && <div> {errors.password.message} </div>}
+                        {errors.password && <div className='text-red-500'> {errors.password.message} </div>}
 
                     </div>
 
