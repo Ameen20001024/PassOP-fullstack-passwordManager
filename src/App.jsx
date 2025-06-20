@@ -8,10 +8,15 @@ import EditManager from './components/EditManager.jsx'
 import RegisterNavbar from './components/RegisterNavbar.jsx'
 import LoginNavbar from './components/LoginNavbar.jsx'
 import Login from './components/login.jsx'
+import { ManagerProvider } from './components/contexts/ManagerContexts.jsx'
+
 
 
 
 function App() {
+
+    // const [form, setForm] = useState({site_url: "", username: "", password: "" })
+    // const [passwordArray, setPasswordArray] = useState([])
 
     const Router = createBrowserRouter([
 
@@ -73,9 +78,9 @@ function App() {
 
 
     return (
-      <>
+      <ManagerProvider>
         <RouterProvider router = {Router} />
-      </>
+      </ManagerProvider>
     )
 }
 

@@ -3,12 +3,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useManager } from './contexts/ManagerContexts.jsx';
+
 
 
 const Manager = () => {
 
-    const [form, setForm] = useState({site_url: "", username: "", password: "" })
-    const [passwordArray, setPasswordArray] = useState([])
+    // const [form, setForm] = useState({site_url: "", username: "", password: "" })
+    // const [passwordArray, setPasswordArray] = useState([])
+    const {form, setForm, passwordArray, setPasswordArray} = useManager()
     const ref = useRef()
     const passwordRef = useRef()
     const navigate = useNavigate()
@@ -106,11 +109,11 @@ const Manager = () => {
 
     const handleEdit = (id) => {
 
-        // setForm(passwordArray.filter(i=>i.id===id)[0])
-
+        setForm(passwordArray.find(item => id === item._id))
+        console.log(form)
+        setPasswordArray(passwordArray.filter(item=> id !== item._id))
         navigate(`/manager/edit/${id}`)
-        // setForm(passwordArray.filter(item => id === item.id)[0])
-        // setPasswordArray(passwordArray.filter(item=> id !== item.id))
+        
     }
 
     const showpassword = () => {
